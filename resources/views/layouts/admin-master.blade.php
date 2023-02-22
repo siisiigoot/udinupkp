@@ -157,7 +157,8 @@
                 data: {'verifikasi': verifikasi, 'id': id},
                 success: function(data){
                 console.log(data.success)
-                }
+                location.reload()
+            }
             });
         })
     })

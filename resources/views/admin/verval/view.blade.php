@@ -71,7 +71,13 @@
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <form action="{{ route('verifikasi.kembalikan') }}" method="post">
                             @csrf
-                            <button type="submit" class="btn btn-warning waves-effect waves-light">Tolak <i class="far fa-times-circle"></i></button>
+                            <button type="submit" class="btn btn-warning waves-effect waves-light">Kembalikan <i class="fas fa-exclamation-circle"></i></button>
+                            <input type="hidden" name="subujian" value="{{ $datapendaftaran->subujian->id }}"><br>
+                            <input type="hidden" name="pendaftaran" value="{{ $datapendaftaran->id }}"><br>
+                        </form>
+                        <form>
+                            @csrf
+                            <button type="button" class="btn btn-danger waves-effect waves-light" data-toggle="modal" data-target="#exampleModal">Tolak <i class="far fa-times-circle"></i></button>
                             <input type="hidden" name="subujian" value="{{ $datapendaftaran->subujian->id }}"><br>
                             <input type="hidden" name="pendaftaran" value="{{ $datapendaftaran->id }}"><br>
                         </form>
@@ -207,5 +213,41 @@
     <div class="col-md-0">
     </div>
 </div>
+
+
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Alasan Tolak</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="{{ route('verifikasi.tolak') }}" method="post">
+        @csrf
+        <input type="text" name="pendaftaran" value="{{ $datapendaftaran->id }}"><br>
+        <div class="modal-body">
+            @foreach ($tolak as $dt => $n)
+                <div class="form-group row">
+                    <label for="example-text-input" class="col-sm-3 col-form-label">
+                    {{ $n->nama_dokumen }} {{ $n->id }}
+                    </label> 
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" name="inputAlasan[]" placeholder="{{ $n->nama_dokumen }}">
+                    </div>
+                </div>
+            @endforeach
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
 @endsection

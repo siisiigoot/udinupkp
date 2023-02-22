@@ -133,6 +133,8 @@
                 <span class="badge-warning badge mr-2">{{ $datapendaftaran->status }}</span><br>
                 @elseif ($datapendaftaran->status === 'VERIFIKASI')
                 <span class="badge-info badge mr-2">{{ $datapendaftaran->status }}</span><br>
+                @elseif ($datapendaftaran->status === 'DITOLAK')
+                <span class="badge-danger badge mr-2">{{ $datapendaftaran->status }}</span><br>
                 @else
                 <span class="badge-success badge mr-2">{{ $datapendaftaran->status }}</span><br>
                 @endif <br>
@@ -192,9 +194,11 @@
                         </td>
                         <td class="text-center">
                             @if ($datapendaftaran->status === 'VERIFIKASI')
-                                VERIFIKASI
+                            <span class="badge badge-info mr-2">Verifikasi</span>
                             @elseif ($datapendaftaran->status === 'DISETUJUI')
-                                DISETUJUI
+                            <span class="badge badge-success mr-2">Disetujui</span>
+                            @elseif ($datapendaftaran->status === 'DITOLAK')
+                            <span class="badge badge-danger mr-2">Ditolak</span>
                             @else
                             <form action="{{ route('pendaftaran.upload') }}" method="post" enctype="multipart/form-data">
                                 @csrf

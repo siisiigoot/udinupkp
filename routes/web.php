@@ -89,4 +89,5 @@ Route::get('changeStatus', 'VervalController@changeStatus');
 Route::post('/verifikasi/kirim', 'VervalController@kirim')->name('verifikasi.kirim');
 Route::post('/verifikasi/batal', 'VervalController@batal')->name('verifikasi.batal');
 Route::post('/verifikasi/kembalikan', 'VervalController@kembalikan')->name('verifikasi.kembalikan');
+Route::post('/verifikasi/tolak', 'VervalController@tolak')->name('verifikasi.tolak');
 Route::post('/verifikasi/destroy/{id}', 'VervalController@destroy')->name('verifikasi.destroy');

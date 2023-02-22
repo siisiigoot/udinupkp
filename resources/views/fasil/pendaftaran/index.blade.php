@@ -75,6 +75,8 @@
                     <span class="badge-warning badge mr-2">{{ $data->status }}</span></td>
                 @elseif ($data->status === 'VERIFIKASI')
                     <span class="badge-info badge mr-2">{{ $data->status }}</span></td>
+                @elseif ($data->status === 'DITOLAK')
+                    <span class="badge-danger badge mr-2">{{ $data->status }}</span></td>
                 @else
                     <span class="badge-success badge mr-2">{{ $data->status }}</span></td>
                 @endif

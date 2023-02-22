@@ -33,6 +33,8 @@ class VervalController extends Controller
 		$hitungsudah=Pemberkasan::where('pendaftaran_id',$id)->where('file','<>',' ')->count();
         $hitungberkas=Pemberkasan::where('pendaftaran_id',$id)->count();
         $no = 0;
+		$hitungbelum=Pemberkasan::where('pendaftaran_id',$id)->where('verifikasi','0')->count();
+		// $tolak=Pemberkasan::where('pendaftaran_id',$id)->where('verifikasi','0')->get();
         $datapemberkasan = DB::table('pemberkasan')
                 ->join('pendaftaran', 'pendaftaran.id', '=', 'pemberkasan.pendaftaran_id')
                 ->join('dokumen', 'pemberkasan.dokumen_id', '=', 'dokumen.id')
@@ -40,8 +42,16 @@ class VervalController extends Controller
                 ->select('dokumen.*','pemberkasan.id','pemberkasan.file','pemberkasan.folder','pemberkasan.verifikasi')
                 ->orderBy('pemberkasan.dokumen_id','asc')
                 ->get();
+        $tolak = DB::table('pemberkasan')
+                ->join('pendaftaran', 'pendaftaran.id', '=', 'pemberkasan.pendaftaran_id')
+                ->join('dokumen', 'pemberkasan.dokumen_id', '=', 'dokumen.id')
+                ->where('pendaftaran.id','=',$id)
+                ->where('pemberkasan.verifikasi','=',0)
+                ->select('dokumen.*','pemberkasan.id','pemberkasan.file','pemberkasan.folder','pemberkasan.verifikasi')
+                ->orderBy('pemberkasan.dokumen_id','asc')
+                ->get();
 
-        return view('admin.verval.view', compact('hitung','hitungsudah','hitungberkas','datapendaftaran','datapemberkasan','no'));
+        return view('admin.verval.view', compact('hitung','hitungsudah','hitungberkas','datapendaftaran','datapemberkasan','no','hitungbelum','tolak'));
     }
 
     public function changeStatus(Request $request)
@@ -80,6 +90,24 @@ class VervalController extends Controller
         // return redirect('/verifikasi/view/'.$id)->with('pesan', 'Usulan telah di setujui.');
     }
 
+    public function tolak(Request $request){
+        $request->validate([
+            'inputAlasan' => 'required',
+            'pendaftaran' => 'required'
+        ]);
+
+        $id= $request->pendaftaran;
+        // $hitung=Pemberkasan::where('pendaftaran_id',$id)->where('verifikasi','1')->count();
+        $table = Pemberkasan::where('pendaftaran_id',$id)->where('verifikasi','0')->get();
+        $tolak = $request->inputAlasan;
+        dd($tolak);
+        $kirim=Pemberkasan::find(69);
+        $kirim->alasan_tolak = "VERIFIKASI";
+        $kirim->save(); 
+        // return redirect('/verifikasi/view/'.$id)->with('pesan', 'Usulan telah di tolaks.');
+        // dd($hasil);
+    }
+
     public function batal(Request $request){
         $request->validate([
             'subujian' => 'required',
@@ -89,7 +117,7 @@ class VervalController extends Controller
         $change = DB::table('pemberkasan')->where('pendaftaran_id',$id)->update(['verifikasi'=>0]);
         $kirim=Pendaftaran::find($id);
         $kirim->status = "VERIFIKASI";
-        $kirim->update(); 
+        $kirim->save(); 
         return redirect('/verifikasi/view/'.$id)->with('pesan', 'Usulan berhasil dibatalkan.');
     }
     
