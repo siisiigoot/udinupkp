@@ -64,7 +64,7 @@ class PendaftaranController extends Controller
                 ->join('pendaftaran', 'pendaftaran.id', '=', 'pemberkasan.pendaftaran_id')
                 ->join('dokumen', 'pemberkasan.dokumen_id', '=', 'dokumen.id')
                 ->where('pendaftaran.id','=',$id)
-                ->select('dokumen.*','pemberkasan.id','pemberkasan.file','pemberkasan.folder')
+                ->select('dokumen.*','pemberkasan.id','pemberkasan.file','pemberkasan.folder','pemberkasan.verifikasi','pemberkasan.alasan_tolak','pemberkasan.dokumen_id')
                 ->orderBy('pemberkasan.dokumen_id','asc')
                 ->get();
 /*         $nosurat = DB::table('pengantar')

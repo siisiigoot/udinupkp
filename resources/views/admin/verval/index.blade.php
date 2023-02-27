@@ -28,7 +28,7 @@
     </div>
 </div> --}}
 <br>
-
+{{-- 
 <div class="table-responsive b-0" data-pattern="priority-columns">
     <table id="datatable" class="table table-sm table-bordered table-striped" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
         <thead>
@@ -73,8 +73,10 @@
                     <span class="badge-warning badge mr-2">{{ $data->status }}</span></td>
                 @elseif ($data->status === 'VERIFIKASI')
                     <span class="badge-info badge mr-2">{{ $data->status }}</span></td>
-                @else
+                @elseif ($data->status === 'DISETUJUI')
                     <span class="badge-success badge mr-2">{{ $data->status }}</span></td>
+                @else
+                    <span class="badge-danger badge mr-2">{{ $data->status }}</span></td>
                 @endif
             <td class="text-center">
                 @if ($data->status <> 'BARU')
@@ -93,8 +95,101 @@
     </tbody>
     </table>
 </div>
-<div class="pagination justify-content-center">{{ $datapendaftaran->appends(request()->except('page'))->links() }}</div>
+<div class="pagination justify-content-center">{{ $datapendaftaran->appends(request()->except('page'))->links() }}</div> --}}
 
+{{-- <form action="{{ route('verifikasi') }}" method="get">
+
+    <label for="periode">Periode:</label>
+    <select name="periode" id="periode">
+        <option value="">All roles</option>
+        <option value="2021-10">2021-10</option>
+        <option value="2022-10">2022-10</option>
+    </select>
+
+    <label for="status">Status:</label>
+    <select name="status" id="status">
+        <option value="">All statuses</option>
+        <option value="DITOLAK">Ditolak</option>
+        <option value="DISETUJUI">DISETUJUI</option>
+        <option value="VERIFIKASI">VERIFIKASI</option>
+        <option value="BARU">BARU</option>
+    </select>
+
+    <button type="submit">Filter</button>
+</form>
+
+<table id="pendaftarans-table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+</table> --}}
+
+
+      
+    {{-- <div class="card">
+        <div class="card-body">
+            <div class="form-group">
+                <label><strong>Status :</strong></label>
+                <select id='status' class="form-control" style="width: 200px">
+                    <option value="">-Pilih Status-</option>
+                    <option value="BARU">Baru</option>
+                    <option value="VERIFIKASI">Verifikasi</option>
+                    <option value="DISETUJUI">Disetujui</option>
+                    <option value="DITOLAK">Ditolak</option>
+                </select>
+            </div>
+        </div>
+    </div> --}}
+
+    <h4 class="mt-0 header-title">Grid options</h4>
+    <p class="text-muted m-b-15">See how aspects of the Bootstrap grid
+        system work across multiple devices with a handy table.</p>
+   <!-- Search filter -->
+   <div>
+       <!-- periode -->
+       <label for="sel1" class="form-label">Pilih Periode : </label>
+       <select class="form-select" id='sel_periode'>
+          <option value=''>-- Semua Periode --</option>
+          @foreach($periodes as $periode){
+             <option value='{{ $periode->periode }}'>{{ $periode->periode }}</option>
+          }
+          @endforeach
+       </select>
+
+       <!-- status -->
+       <label for="sel2" class="form-label">Pilih Status : </label>
+       <select id='sel_status'>
+        <option value=''>-- Semua Status --</option>
+        @foreach($statuses as $status){
+           <option value='{{ $status->status }}'>{{ $status->status }}</option>
+        }
+        @endforeach
+       </select>
+
+       <!-- Jenis -->
+       <label for="sel3" class="form-label">Pilih Jenis Ujian : </label>
+       <input type="text" id="sel_subujian" placeholder="Cari Ujian">
+
+   </div>
+
+   <table id='empTable' width='100%' class="table table-bordered dt-responsive nowrap" style='border-collapse: collapse;'>
+      <thead>
+         <tr>
+            <th>No</th>
+            <th>Periode</th>
+            <th>Nama Pegawai</th>
+            <th>Nama Ujian</th>
+            <th>Status</th>
+            <th>Perangkat Daerah</th>
+            <th>Aksi</th>
+         </tr>
+      </thead>
+   </table>
 @endsection
 
 

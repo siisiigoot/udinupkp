@@ -42,65 +42,35 @@
         </div>            
     </div>
     <div class="col-md-6">
-        @if ($datapendaftaran->status === 'VERIFIKASI')
-            {{-- cek jika status baru --}}
-            @if ($datapendaftaran->subujian->id < 3 and $hitung === 4)
-                <form action="{{ route('verifikasi.kirim') }}" method="post">
+        <div class="text-right" role="toolbar">
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <form action="{{ route('verifikasi.kembalikan') }}" method="post">
                     @csrf
-                    <div class="text-right" role="toolbar">
-                        <button type="submit" class="btn btn-primary waves-effect waves-light">Terima <i class="fas fa-check-circle"></i></button>
-                    </div>  
-                    {{-- UDIN<br> --}}
+                    <button type="submit" class="btn btn-danger waves-effect waves-light">Reset <i class="fas fa-exclamation-circle"></i></button>
                     <input type="hidden" name="subujian" value="{{ $datapendaftaran->subujian->id }}"><br>
-                    <input type="hidden" name="jumlahberkas" value="{{ $hitung }}"><br>
                     <input type="hidden" name="pendaftaran" value="{{ $datapendaftaran->id }}"><br>
                 </form>
-            @elseif ($datapendaftaran->subujian->id > 2 and $hitung === 10)
-                <form action="{{ route('verifikasi.kirim') }}" method="post">
+                {{-- <form action="{{ route('verifikasi.tolak') }}" method="post"> --}}
+                    {{-- @csrf --}}
+                {{-- <form>
+                    @csrf --}}
+                    {{-- <button type="button" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#exampleModal">xx <i class="far fa-times-circle"></i></button>
+                    <input type="hidden" name="subujian" value="{{ $datapendaftaran->subujian->id }}">
+                    <input type="hidden" name="pendaftaran" value="{{ $datapendaftaran->id }}"> --}}
+                {{-- </form> --}}
+                    {{-- @csrf
+                    <button type="button" class="btn btn-danger waves-effect waves-light" data-toggle="modal" data-target="#exampleModal">Tolak <i class="far fa-times-circle"></i></button>
+                    <input type="hidden" name="subujian" value="{{ $datapendaftaran->subujian->id }}"><br>
+                    <input type="hidden" name="pendaftaran" value="{{ $datapendaftaran->id }}"><br> --}}
+                {{-- </form> --}}
+                <form>
                     @csrf
-                    <div class="text-right" role="toolbar">
-                        <button type="submit" class="btn btn-primary waves-effect waves-light">Terima <i class="fas fa-check-circle"></i></button>
-                    </div>  
-                    {{-- UPKP<br> --}}
-                    <input type="text" name="subujian" value="{{ $datapendaftaran->subujian->id }}"><br>
-                    <input type="text" name="jumlahberkas" value="{{ $hitung }}"><br>
-                    <input type="text" name="pendaftaran" value="{{ $datapendaftaran->id }}"><br>
+                    <button type="button" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#exampleModal" {{ $datapendaftaran->status === 'BARU' || $datapendaftaran->status === 'DISETUJUI' || $datapendaftaran->status === 'DITOLAK' ? 'disabled' : '' }}>Verifikasi <i class="fas fa-check-circle"></i></button>
+                    <input type="hidden" name="subujian" value="{{ $datapendaftaran->subujian->id }}"><br>
+                    <input type="hidden" name="pendaftaran" value="{{ $datapendaftaran->id }}"><br>
                 </form>
-            @else
-                <div class="text-right" role="toolbar">
-                    <div class="btn-group" role="group" aria-label="Basic example">
-                        <form action="{{ route('verifikasi.kembalikan') }}" method="post">
-                            @csrf
-                            <button type="submit" class="btn btn-warning waves-effect waves-light">Kembalikan <i class="fas fa-exclamation-circle"></i></button>
-                            <input type="hidden" name="subujian" value="{{ $datapendaftaran->subujian->id }}"><br>
-                            <input type="hidden" name="pendaftaran" value="{{ $datapendaftaran->id }}"><br>
-                        </form>
-                        <form>
-                            @csrf
-                            <button type="button" class="btn btn-danger waves-effect waves-light" data-toggle="modal" data-target="#exampleModal">Tolak <i class="far fa-times-circle"></i></button>
-                            <input type="hidden" name="subujian" value="{{ $datapendaftaran->subujian->id }}"><br>
-                            <input type="hidden" name="pendaftaran" value="{{ $datapendaftaran->id }}"><br>
-                        </form>
-                        <form action="{{ route('verifikasi.kirim') }}" method="post">
-                            @csrf
-                            <button type="submit" class="btn btn-primary waves-effect waves-light">Terima <i class="fas fa-check-circle"></i></button>
-                            <input type="hidden" name="subujian" value="{{ $datapendaftaran->subujian->id }}"><br>
-                            <input type="hidden" name="pendaftaran" value="{{ $datapendaftaran->id }}"><br>
-                        </form>
-                    </div>
-                </div>
-            @endif
-        @elseif ($datapendaftaran->status === 'DISETUJUI')
-            <form action="{{ route('verifikasi.batal') }}" method="post">
-                @csrf
-                <div class="text-right" role="toolbar">
-                    <button type="submit" class="btn btn-danger waves-effect waves-light" onClick="return confirm('Apakah yakin verifikasi akan dibatalkan?')">Batalkan <i class="fas fa-undo"></i></button>
-                </div>
-                <input type="hidden" name="subujian" value="{{ $datapendaftaran->subujian->id }}"><br>
-                <input type="hidden" name="jumlahberkas" value="{{ $hitung }}"><br>
-                <input type="hidden" name="pendaftaran" value="{{ $datapendaftaran->id }}"><br>
-            </form>
-        @endif
+            </div>
+        </div>
     </div>
 </div>
 <div class="row">
@@ -170,39 +140,40 @@
                         <th style="width: 45%;">Nama Dokumen</th>
                         <th style="width: 20%;">Keterangan</th>
                         <th style="width: 15%;">Dokumen</th>
-                        <th style="width: 20%;">Verifikasi</th>
+                        <th style="width: 20%;">Ceklis</th>
                     </tr>
                 </thead>
             <body>
                 @foreach ($datapemberkasan as $data )                   
                 <tr>
                     <td class="text-center">{{ ++$no }}</td>
-                    <td class="text-left">{{ $data->ket }}</td>  
+                    <td class="text-left">{{ $data->ket }} <br> @if($data->alasan_tolak)<span class='text-danger font-italic' >*{{ $data->alasan_tolak }} @endif</span></td>  
                     <td class="text-center">{{ $data->nama_dokumen }}</td>  
                     <td class="text-center">
                         @if ($data->file === ' ')
-                            <span class="badge-danger badge mr-2">Belum</span>
+                            <span class="badge-danger badge mr-2">Belum unggah</span>
                         @else                       
                             <a href="{{ asset('uploads/'.$data->folder.'/'. $data->file) }}" target="_blank" class="badge-success badge mr-2"> Lihat Dokumen </a>  
                         @endif
                         
                     </td>
                     <td class="text-center">
-                        @if ($datapendaftaran->status === 'BARU' OR $datapendaftaran->status === 'DISETUJUI')
-                            <div class="form-check form-switch">
-                                <input data-id="{{$data->id}}" class="toggle-class" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $data->verifikasi ? 'checked' : '' }} disabled>
-                            </div>
+                        @if ($data->status == "BARU")
+                            <span class="badge badge-dark badge-pill"><i class="mdi mdi-checkbox-blank-circle text-light"></i> Pending</span>
+                        @elseif ($data->status == "DISETUJUI")
+                            <span class="badge badge-success badge-pill"><i class="mdi mdi-checkbox-blank-circle text-light"></i> oke</span>
+                        @elseif ($data->status == "DITOLAK")
+                            <span class="badge badge-warning badge-pill"><i class="mdi mdi-checkbox-blank-circle text-light"></i> Pending</span>
                         @else
-
-                        <div class="form-check form-switch">
-                            <input data-id="{{$data->id}}" class="toggle-class" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $data->verifikasi ? 'checked' : '' }}>
-                        </div>
+                            <div class="btn-group btn-group-sm btn-group-toggle" aria-label="Basic example" data-toggle="buttons">
+                                <label data-id="{{$data->id}}" data-value="1" class="btn btn-sm waves-effect waves-light {{ $data->verifikasi == 1 ? 'btn-success' : 'btn-light btn-sm waves-effect waves-success toggle-class' }} ">
+                                    <input value="1" data-id="{{$data->id}}" type="radio" name="options" id="option1" autocomplete="off" {{ $data->verifikasi == 1 ? 'checked' : '' }}> Terima
+                                </label>
+                                <label  data-id="{{$data->id}}" data-value="2" class="btn btn-sm waves-effect waves-light {{ $data->verifikasi == 2 ? ' btn-danger' : 'btn-light btn-sm waves-effect waves-danger toggle-class' }}">
+                                    <input value="2"  type="radio" name="options" id="option1" autocomplete="off" {{ $data->verifikasi == 2 ? 'checked' : '' }}> Tolak
+                                </label>
+                            </div>
                         @endif
-                        
-{{--                         <form action="{{ route('pendaftaran.destroy', $data->id) }}" method="post">
-                        @csrf
-                            <button class="btn btn-icon icon-left btn-danger btn-sm" onClick="return confirm('Yakin mau dihapus?')"><i class="fas fa-trash"></i></button>
-                        </form> --}}
                     </td>              
                 </tr>
                 @endforeach
@@ -214,40 +185,70 @@
     </div>
 </div>
 
-
   
   <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div id="exampleModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Alasan Tolak</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <form action="{{ route('verifikasi.tolak') }}" method="post">
-        @csrf
-        <input type="text" name="pendaftaran" value="{{ $datapendaftaran->id }}"><br>
-        <div class="modal-body">
-            @foreach ($tolak as $dt => $n)
-                <div class="form-group row">
-                    <label for="example-text-input" class="col-sm-3 col-form-label">
-                    {{ $n->nama_dokumen }} {{ $n->id }}
-                    </label> 
-                    <div class="col-sm-9">
-                        <input class="form-control" type="text" name="inputAlasan[]" placeholder="{{ $n->nama_dokumen }}">
-                    </div>
-                </div>
-            @endforeach
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-          <button type="submit" class="btn btn-primary">Submit</button>
-        </div>
-        </form>
-      </div>
-    </div>
-  </div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myModalLabel">Modal Heading</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="card-body">
+                <h4 class="mt-0 header-title">Resume Verifikasi</h4>
+                @if ($hitungxxx > 0)
+                <p class="text-muted m-b-5"> <code>Tidak dapat Diverifikasi</code>. Cek kembali dokumen.
+                </p>
+                @else
+                    @if ($hitungtolak>0)
+                        <p class="text-muted m-b-5">Terdapat <code>{{ $hitungtolak }}</code> dokumen yang <span class="badge badge-danger">DITOLAK</span>.
+                        </p>
+                    @else
+                    <p class="text-muted m-b-5">Semua dokumen telah <span class="badge badge-success">DISETUJUI</span>.
+                    </p>
+                    @endif
+                @endif
+                <table class="table table-sm table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-center">No</th>
+                            <th class="text-center">Nama Dokumen</th>
+                            <th class="text-center">Verifikasi</th>
+                            <th class="text-center">Keterangan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($tolak as $dt )
+                        <tr>
+                            <td class="text-center">{{ ++$urut }}</td>
+                            <td class="text-left">{{ $dt->nama_dokumen }}</td>
+                            <td class="text-center">
+                                @if ($dt->verifikasi == 1)
+                                <i class="far fa-check-circle" style='font-size:24px; color:#28a745'></i>
+                                @elseif ($dt->verifikasi == 2)
+                                <i class="far fa-times-circle" style='font-size:24px; color:#dc3545;'></i>
+                                @else
+                                <i class="fas fa-question-circle" style='font-size:24px; color:#6c757d;'></i>
+                                @endif
+                            </td class="text-center">
+                            <td class="text-left">{{ $dt->verifikasi == 2 ? 'Alasan Tolak :' : '' }}<br />{{ $dt->alasan_tolak }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <form action="{{ route('verifikasi.proses') }}" method="post">
+                    <input type="hidden" name="subujian" value="{{ $datapendaftaran->subujian->id }}"><br>
+                    <input type="hidden" name="pendaftaran" value="{{ $datapendaftaran->id }}"><br>
+                    @csrf
+                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Tutup</button>
+                    <button type="submit" class="btn {{ $hitungtolak == 0 ? 'btn-success' : 'btn-danger' }} waves-effect waves-light" {{ $hitungxxx == 0 ? '' : 'disabled' }}>{{ $hitungtolak == 0 || $hitungxxx <> 0 ? 'Verifikasi' : 'Tolak' }}
+                    </button>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 @endsection

@@ -145,24 +145,85 @@
                 $('[data-toggle="tooltip"]').tooltip()
             });
 
-    $(function() {
-    $('.toggle-class').change(function() {
-        var verifikasi = $(this).prop('checked') == true ? 1 : 0; 
-        var id = $(this).data('id'); 
-         
-            $.ajax({
-                type: "GET",
-                dataType: "json",
-                url: '/changeStatus',
-                data: {'verifikasi': verifikasi, 'id': id},
-                success: function(data){
-                console.log(data.success)
-                location.reload()
-            }
+            $(function() {
+                $('.toggle-class').click(function() {
+                    var verifikasi = $(this).data('value'); 
+                    var id = $(this).data('id'); 
+                    
+                    if(verifikasi == 2) {
+                        var alasan = prompt("Masukkan alasan tolak:");
+                        
+                        console.log(alasan)
+                        if(alasan == null) {
+                            
+                        } else {
+                            $.ajax({
+                                type: "GET",
+                                dataType: "json",
+                                url: '/changeStatus',
+                                data: {'verifikasi': verifikasi, 'id': id, 'alasan': alasan},
+                                success: function(data){
+                                    console.log(data.success)
+                                    location.reload()
+                                }
+                            });
+                        }
+                    } else {
+                        $.ajax({
+                            type: "GET",
+                            dataType: "json",
+                            url: '/changeStatus',
+                            data: {'verifikasi': verifikasi, 'id': id, 'alasan': null},
+                            success: function(data){
+                                console.log(data.success)
+                                location.reload()
+                            }
+                        });
+                    }
+
+                   
+                })
             });
-        })
-    })
+
+
+   
+      $(document).ready(function(){
+
+      // DataTable
+      var empTable = $('#empTable').DataTable({
+          processing: true,
+          serverSide: true,
+          ajax: {
+             url:"{{route('verifikasi.getPendaftaran')}}",
+             data: function(data){
+                data.searchPeriode = $('#sel_periode').val();
+                data.searchStatus = $('#sel_status').val();
+                data.searchSubUjian = $('#sel_subujian').val();
+                data.searchPd = $('#sel_pd').val();
+             }
+          },
+          columns: [
+            { data: 'id' },
+            { data: 'periode' },
+            { data: 'namapeg' },
+            { data: 'namasubujian' },
+            { data: 'status' },
+            { data: 'namapd' },
+            { data: 'action' },
+          ]
+      });
+
+      $('#sel_periode,#sel_status').change(function(){
+         empTable.draw();
+      });
+
+      $('#sel_subujian').keyup(function(){
+         empTable.draw();
+      });
+
+   });
         </script>
+        
     </body>
 
 </html>

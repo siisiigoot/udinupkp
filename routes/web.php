@@ -84,8 +84,11 @@ Route::post('/pengantar/upload', 'PengantarController@upload')->name('pengantar.
 Route::post('/pengantar/kirim', 'PengantarController@kirim')->name('pengantar.kirim');
 
 Route::get('/verifikasi', 'VervalController@index')->name('verifikasi');
+Route::get('/verifikasi/getPendaftaran', 'VervalController@getPendaftaran')->name('verifikasi.getPendaftaran');
+Route::get('/verifikasi/data', 'VervalController@data')->name('verifikasi.data');
 Route::get('/verifikasi/view/{id}', 'VervalController@view')->name('verifikasi.view');
 Route::get('changeStatus', 'VervalController@changeStatus');
+Route::post('/verifikasi/proses', 'VervalController@proses')->name('verifikasi.proses');
 Route::post('/verifikasi/kirim', 'VervalController@kirim')->name('verifikasi.kirim');
 Route::post('/verifikasi/batal', 'VervalController@batal')->name('verifikasi.batal');
 Route::post('/verifikasi/kembalikan', 'VervalController@kembalikan')->name('verifikasi.kembalikan');

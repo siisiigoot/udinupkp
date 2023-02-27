@@ -171,34 +171,52 @@
         <div class="table-responsive">
             <table class="table table-sm" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                 <thead>
-                    <tr class="text-center">
-                        <th style="width: 5%;">No</th>
-                        <th style="width: 45%;">Nama Dokumen</th>
-                        <th style="width: 20%;">Keterangan</th>
-                        <th style="width: 15%;">Unggah Dokumen</th>
-                        <th style="width: 20%;">Aksi</th>
+                    <tr>
+                        <th class="text-center" style="width: 5%;">No</th>
+                        <th class="text-center" style="width: 45%;">Nama Dokumen</th>
+                        <th class="text-center" style="width: 35%;">Keterangan</th>
+                        <th class="text-center" style="width: 15%;">{{ $datapendaftaran->status == 'BARU' ? 'Aksi' : '' }}</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($datapemberkasan as $data )                   
                     <tr>
                         <td class="text-center">{{ ++$no }}</td>
-                        <td class="text-left">{{ $data->ket }}</td>  
-                        <td class="text-center">{{ $data->nama_dokumen }}</td>  
+                        <td class="text-left">{{ $data->ket }}
+                        </td>  
                         <td class="text-center">
-                            @if ($data->file === ' ')
-                                <span class="badge badge-danger rounded-pill mr-2">Belum</span>
-                            @else                       
-                                <a href="{{ asset('uploads/'.$data->folder.'/'. $data->file) }}" target="_blank" class="badge-success badge mr-2"> Lihat Dokumen </a>  
-                            @endif 
-                        </td>
+                            @if ($data->folder == " ")
+                            <span class="badge badge-danger rounded-pill mr-2">Belum unggah</span>
+                            @else
+                            <a href="{{ asset('uploads/'.$data->folder.'/'. $data->file) }}" target="_blank"><i class="far {{ $data->dokumen_id == 4 || $data->dokumen_id == 13 ? 'fa-image' : 'fa-file-pdf'}}" style='font-size:24px'></i></a>
+                            @endif
+                            <br />
+                            @if($datapendaftaran->status == 'BARU' and $data->verifikasi == 0)
+                            {{ $data->nama_dokumen}}
+                            {{-- <span class="badge badge-success rounded-pill mr-2">{{ $data->nama_dokumen}}</span> --}}
+                            @elseif($datapendaftaran->status == 'VERIFIKASI')
+                            {{ $data->nama_dokumen}}
+                            @elseif($datapendaftaran->status == 'DISETUJUI')
+                            {{ $data->nama_dokumen}}
+                            @else
+                            {{ $data->nama_dokumen}}<br />
+                                @if($data->verifikasi == 2)
+                                <strong>Alasan Tolak : <span class='text-danger font-italic' >{{ $data->alasan_tolak }}</span></strong><br />
+                                @endif
+                            
+                            @endif
+                        </td>                
                         <td class="text-center">
-                            @if ($datapendaftaran->status === 'VERIFIKASI')
-                            <span class="badge badge-info mr-2">Verifikasi</span>
-                            @elseif ($datapendaftaran->status === 'DISETUJUI')
-                            <span class="badge badge-success mr-2">Disetujui</span>
-                            @elseif ($datapendaftaran->status === 'DITOLAK')
-                            <span class="badge badge-danger mr-2">Ditolak</span>
+                            @if ($datapendaftaran->status == 'VERIFIKASI' and $data->verifikasi == 0)
+                            <i class="fas fa-question-circle" style='font-size:24px; color:#6c757d;'></i><br />
+                            <span class="badge badge-secondary rounded-pill mr-2"> Menunggu Verifikasi </span>
+                            @elseif ($data->verifikasi == 1)
+                            <i class="far fa-check-circle" style='font-size:24px; color:#28a745'></i><br />
+                            <span class="badge badge-success rounded-pill mr-2"> Diverifikasi </span>
+                            @elseif ($data->verifikasi == 2)
+                            <i class="far fa-times-circle" style='font-size:24px; color:#dc3545;'></i>
+                            <br />
+                            <span class="badge badge-danger rounded-pill mr-2"> Ditolak </span>
                             @else
                             <form action="{{ route('pendaftaran.upload') }}" method="post" enctype="multipart/form-data">
                                 @csrf

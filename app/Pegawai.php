@@ -16,6 +16,6 @@ class Pegawai extends Model
         return $this->hasOne('App\perangkatdaerah');
     }
     protected $fillable = [
-        'id', 'pd_id', 'password',
+        'id', 'pd_id', 'pd', 'password',
     ];
 }
